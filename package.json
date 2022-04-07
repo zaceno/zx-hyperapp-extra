@@ -1,6 +1,6 @@
 {
     "name": "@zxlabs/hyperapp-extra",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "experimental utilities for hyperapp",
     "main": "index.js",
     "directories": {

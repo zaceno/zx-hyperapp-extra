@@ -1,18 +1,22 @@
 import { h, type ClassProp, type VNode } from "hyperapp"
 
-export default function viewComponent<P, S = any>(
-  func: (props: P) => VNode<S>,
-): (props: Omit<P, "key" | "class"> & {
-  key?: VNode<S>["key"]
-  class?: ClassProp
-}) => VNode<S> {
-  return (props) => {
-    const { key, class: klass, ...rest } = props as P & {
-      key?: VNode<S>["key"]
+export default function viewComponent<P>(func: (props: P) => VNode<any>): (
+  props: Omit<P, "key" | "class"> & {
+    key?: string
+    class?: ClassProp
+  },
+) => VNode<any> {
+  return props => {
+    const {
+      key,
+      class: klass,
+      ...rest
+    } = props as P & {
+      key?: string
       class?: ClassProp
     }
     const vnode = func(rest as P)
-    if (vnode.type !== 1) return vnode
+    if (vnode == null || vnode.type === 3) return vnode
     if (key === undefined && klass === undefined) return vnode
     const vnodeProps = vnode.props as { class?: ClassProp }
     return {
@@ -24,6 +28,7 @@ export default function viewComponent<P, S = any>(
           : {
               ...vnodeProps,
               class: h("x", { class: [klass, vnodeProps.class] }).props.class,
+              "data-key": key ?? "nokey",
             },
     }
   }

@@ -1,10 +1,9 @@
 import { app, h, text } from "hyperapp"
-import { setDocumentTitle } from "../src/effects/set-document-title"
 
 type State = { count: number }
 
 app<State>({
-  init: [{ count: 0 }, [setDocumentTitle, "Hyperapp Extra demo"]],
+  init: { count: 0 },
   view: ({ count }) =>
     h("div", {}, [
       h("h1", {}, text("Hyperapp Extra")),

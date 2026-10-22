@@ -7,7 +7,9 @@
     "strict": true,
     "skipLibCheck": true,
     "types": ["node", "vitest/globals"],
-    "noEmit": true
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "vite-plugin-hyperapp/jsx"
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts", "demo/**/*.ts", "*.config.ts"]
+  "include": ["src/**/*.ts", "tests/**/*.ts", "demo/**/*.ts", "demo/**/*.tsx", "*.config.ts"]
 }

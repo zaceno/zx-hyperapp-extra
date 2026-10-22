@@ -1,0 +1,10 @@
+# Project guide
+
+- This package is `@zxlabs/hyperapp-extra`, an ESM library of Hyperapp utilities written in TypeScript.
+- Put public utilities in `src/`, grouped into subfolders as needed. Every file in `src/` is a separate public entry point, except when prefixed with `_`; `src/foo/bar.ts` is imported as `@zxlabs/hyperapp-extra/foo/bar`. Avoid accidental public files under `src/`. Files in `src/`
+- `npm run build` produces minified ESM JavaScript and JS source maps with Vite, then TypeScript declarations and declaration maps in matching paths under `dist/`. Hyperapp is a peer dependency and must stay external to the library build.
+- Put automated tests in `tests/**/*.test.ts`; run `npm test`. Run `npm run typecheck` for TypeScript checks.
+- Tests under `tests/browser/**` run in real Chromium via Vitest browser mode (Playwright provider); `npm test` runs them together with the node tests, or use `npm run test:node` / `npm run test:browser` to run one project. Browser tests need `npx playwright install chromium` once per machine.
+- The proper way to stop a Hyperapp app is to call its `dispatch()` with no arguments: pending effect dispatches become inert (e.g. a fetch resolving right when the app is destroyed) and all active subscriptions are unsubscribed. It leaves the DOM in place, so clear the mount node separately. Caveat: it nulls the state but cannot cancel a render already scheduled with `requestAnimationFrame` — let such a render land first (await one rAF) or the queued render will call the view with an undefined state and crash. So in test cleanup: drain a frame, then `dispatch()`, then clear the DOM.
+- Put manual browser experiments in `demo/`; `npm run dev` serves `demo/index.html` with Vite. Import source files from `../src/` for hot reload and browser debugging with source maps. Demo code is not published.
+- Keep the `exports` wildcard in `package.json` aligned with the build output paths. Do not move or modify the pre-existing `old/` archive unless explicitly requested.

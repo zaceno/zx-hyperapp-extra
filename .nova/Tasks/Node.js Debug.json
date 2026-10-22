@@ -1,0 +1,11 @@
+{
+  "extension" : {
+    "identifier" : "panic.JavaScript",
+    "name" : "JavaScript"
+  },
+  "extensionTemplate" : "nodeDebug",
+  "extensionValues" : {
+    "host" : "localhost",
+    "request" : "attach"
+  }
+}

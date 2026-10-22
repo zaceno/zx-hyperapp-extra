@@ -17,7 +17,7 @@ export default (vnode, fn) => {
     set(e) {
       if (elem === e) return
       elem = e
-      window.queueMicrotask(() => fn(elem))
+      queueMicrotask(() => fn(elem))
     },
   })
 }

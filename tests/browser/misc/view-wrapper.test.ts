@@ -9,7 +9,7 @@ import {
   type ElementVNode,
   type VNode,
 } from "hyperapp"
-import viewComponent from "../../../src/misc/view-component"
+import viewWrapper from "../../../src/misc/view-wrapper"
 
 const waitAFrame = () => new Promise(res => requestAnimationFrame(res))
 
@@ -31,36 +31,36 @@ const renderedClass = (
   innerClass: ClassProp | undefined,
   wrapperClass: ClassProp,
 ) => {
-  const Inner = viewComponent<{}>(() =>
+  const Inner = viewWrapper<{}>(() =>
     h("div", { class: innerClass }, text("content")),
   )
   return classOf(Inner({ class: wrapperClass }))
 }
 
-describe("viewComponent, invoked directly", () => {
+describe("viewWrapper, invoked directly", () => {
   it("returns the inner element vnode untouched when neither key nor class is supplied", () => {
     const inner = h("div", { id: "inner" }, text("content"))
-    const Wrapped = viewComponent<{}>(() => inner)
+    const Wrapped = viewWrapper<{}>(() => inner)
 
     expect(Wrapped({})).toBe(inner)
   })
 
   it("adds the key to the top-level element vnode", () => {
     const inner = h("section", {}, [h("div", {}, text("nested"))])
-    const Wrapped = viewComponent<{}>(() => inner)
+    const Wrapped = viewWrapper<{}>(() => inner)
 
     const vnode = Wrapped({ key: "row-1" })
 
     expect(vnode.tag).toBe("section")
     expect(vnode.key).toBe("row-1")
-    // The key belongs on the vnode returned by viewComponent, not on a child.
+    // The key belongs on the vnode returned by viewWrapper, not on a child.
     const child = (vnode as ElementVNode<any>).children[0] as VNode<any>
     expect(child.key).toBeUndefined()
   })
 
   it("keeps an inner vnode's own key when no key is supplied", () => {
     const inner = h("div", { key: "inner-key" }, text("content"))
-    const Wrapped = viewComponent<{}>(() => inner)
+    const Wrapped = viewWrapper<{}>(() => inner)
 
     expect(classOf(Wrapped({ class: "outer" }))).toBe("outer")
     expect(Wrapped({ class: "outer" }).key).toBe("inner-key")
@@ -98,7 +98,7 @@ describe("viewComponent, invoked directly", () => {
       { id: "inner", class: "inner", title: "title" },
       text("content"),
     )
-    const Wrapped = viewComponent<{}>(() => inner)
+    const Wrapped = viewWrapper<{}>(() => inner)
 
     const vnode = Wrapped({ key: "row-2", class: ["outer", { active: true }] })
 
@@ -110,7 +110,7 @@ describe("viewComponent, invoked directly", () => {
 
   it("does not pass key or class through to the inner component", () => {
     let seen: Record<string, unknown> | undefined
-    const Wrapped = viewComponent<{
+    const Wrapped = viewWrapper<{
       id: string
       class?: string
       key?: string
@@ -128,7 +128,7 @@ describe("viewComponent, invoked directly", () => {
 
   it("passes a text vnode through unchanged, ignoring key and class", () => {
     const inner = text("plain text")
-    const Wrapped = viewComponent<{}>(() => inner)
+    const Wrapped = viewWrapper<{}>(() => inner)
 
     const vnode = Wrapped({ key: "ignored", class: "ignored" })
 
@@ -138,10 +138,10 @@ describe("viewComponent, invoked directly", () => {
   })
 
   it("passes nothing through unchanged, ignoring key and class", () => {
-    const WrappedNull = viewComponent<{}>(
+    const WrappedNull = viewWrapper<{}>(
       () => null as unknown as VNode<any>,
     )
-    const WrappedUndefined = viewComponent<{}>(
+    const WrappedUndefined = viewWrapper<{}>(
       () => undefined as unknown as VNode<any>,
     )
 
@@ -156,7 +156,7 @@ type ClassState = { selected: boolean }
 
 const Toggle: Action<ClassState> = state => ({ selected: !state.selected })
 
-const ClassCard = viewComponent<{
+const ClassCard = viewWrapper<{
   id: string
   label: string
   innerClass?: ClassProp
@@ -183,7 +183,7 @@ const classView = (state: ClassState): ElementVNode<ClassState> =>
     }),
   ])
 
-describe("viewComponent classes in an app", () => {
+describe("viewWrapper classes in an app", () => {
   let dispatch: Dispatch<ClassState>
   let node: HTMLElement
 
@@ -242,7 +242,7 @@ const RemoveMiddle: Action<KeyedState> = state => ({
   items: state.items.filter(item => item.id !== "b"),
 })
 
-const KeyedCard = viewComponent<Item>(props =>
+const KeyedCard = viewWrapper<Item>(props =>
   h("li", { "data-id": props.id }, [
     h("input", { type: "text", "data-item": props.id }),
     text(props.label),
@@ -264,7 +264,7 @@ const keyedView = (state: KeyedState): ElementVNode<KeyedState> =>
     ),
   ])
 
-describe("viewComponent keys in an app", () => {
+describe("viewWrapper keys in an app", () => {
   let dispatch: Dispatch<KeyedState>
   let node: HTMLElement
 
@@ -332,8 +332,8 @@ describe("viewComponent keys in an app", () => {
   })
 })
 
-const TextOnly = viewComponent<{}>(() => text("plain text"))
-const Nothing = viewComponent<{}>(() => null as unknown as VNode<any>)
+const TextOnly = viewWrapper<{}>(() => text("plain text"))
+const Nothing = viewWrapper<{}>(() => null as unknown as VNode<any>)
 
 const passThroughView = (): ElementVNode<{}> =>
   h("div", { id: "pass-through" }, [
@@ -341,7 +341,7 @@ const passThroughView = (): ElementVNode<{}> =>
     Nothing({ key: "nothing-key", class: "ignored" }),
   ])
 
-describe("viewComponent pass-through nodes in an app", () => {
+describe("viewWrapper pass-through nodes in an app", () => {
   let dispatch: Dispatch<{}>
   let node: HTMLElement
 

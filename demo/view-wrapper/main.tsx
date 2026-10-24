@@ -1,12 +1,12 @@
 import "./style.css"
 import { app, type Action } from "hyperapp"
-import viewComponent from "../../src/misc/view-component"
+import viewWrapper from "../../src/misc/view-wrapper"
 
 type Color = "red" | "blue"
 type ThingType = { uid: string; color: Color }
 type State = { things: ThingType[] }
 
-const Thingy = viewComponent<{ color: Color }>(props => (
+const Thingy = viewWrapper<{ color: Color }>(props => (
   <p class="thingy">{props.color.toUpperCase()}</p>
 ))
 

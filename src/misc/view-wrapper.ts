@@ -1,6 +1,6 @@
 import { h, type ClassProp, type VNode } from "hyperapp"
 
-export default function viewComponent<P>(func: (props: P) => VNode<any>): (
+export default function viewWrapper<P>(func: (props: P) => VNode<any>): (
   props: Omit<P, "key" | "class"> & {
     key?: string
     class?: ClassProp

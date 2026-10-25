@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hyperapp Islands</title>
+  </head>
+  <body>
+    <p>This page has several separate app instances all synchronized.</p>
+    <p>Here is an inventory list:</p>
+    <div id="inventory"></div>
+    <script type="module" src="/islands/inventory.tsx"></script>
+
+    <p>Here is a selector to selct which item to count</p>
+    <div id="selector"></div>
+    <script type="module" src="/islands/selector.tsx"></script>
+
+    <p>And here, separately, is the counter:</p>
+    <div id="counter"></div>
+    <script type="module" src="/islands/counter.tsx"></script>
+  </body>
+</html>

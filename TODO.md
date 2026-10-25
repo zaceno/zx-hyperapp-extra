@@ -14,7 +14,11 @@ Misc
   - History API router
   - debuglogging tool
   - Custom-element utility
-  - Synced islands utility
+  - withelement hack
+  - Mapper like elms HTML.map
+  
+Stores
+  - history/undo store
   
 
 Complete tests, docs & usage examples
